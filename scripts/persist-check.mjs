@@ -1,6 +1,11 @@
 import { chromium } from "@playwright/test";
 const BASE = "http://127.0.0.1:3000";
-const browser = await chromium.launch({ args: ["--no-sandbox"] });
+  const browser = await chromium.launch({
+    // `CHROME_PATH` lets the suite run where Playwright's own browser download
+    // is unavailable (restricted networks); unset = Playwright's Chromium.
+    executablePath: process.env.CHROME_PATH || undefined,
+    args: ["--no-sandbox", "--disable-dev-shm-usage"],
+  });
 const page = await (await browser.newContext()).newPage();
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));

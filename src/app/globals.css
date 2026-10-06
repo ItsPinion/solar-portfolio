@@ -56,6 +56,9 @@
   html {
     color-scheme: dark;
     -webkit-text-size-adjust: 100%;
+    /* Painted on <html> (not just <body>) so overscroll / rubber-banding and
+       areas beyond the document height never flash the default white canvas. */
+    background-color: var(--cosmic-black);
   }
 
   html,

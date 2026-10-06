@@ -85,8 +85,13 @@ async function main() {
   await mkdir(OUT, { recursive: true });
 
   const browser = await chromium.launch({
+    // `CHROME_PATH` lets the harness run where Playwright's own browser
+    // download is unavailable (restricted CI/sandbox networks). When unset,
+    // Playwright's bundled Chromium is used as usual.
+    executablePath: process.env.CHROME_PATH || undefined,
     args: [
       "--no-sandbox",
+      "--disable-dev-shm-usage",
       "--enable-unsafe-swiftshader",
       "--use-gl=angle",
       "--use-angle=swiftshader",

@@ -54,6 +54,19 @@ every testing criterion has been executed and verified.
 
 ---
 
+### Phase 0 & 1 re-verified (2nd pass, full re-run from a clean `npm ci`)
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | ✅ clean |
+| `next lint` | ✅ No ESLint warnings or errors |
+| `jest` | ✅ 47/47 across 3 suites |
+| `verify:data` | ✅ 7th planet + technology flow through; orbits non-overlapping (min gap 3 vs 2.25 required); restored to 6 |
+| `verify:stores` | ✅ 17 live browser assertions — defaults, all actions, persistence across reload, `useResponsive` at xs/md/xl — *page errors: none* |
+| `npm run build` | ✅ 6/6 static pages, 87.4 kB First Load JS |
+| `npm run dev` | ✅ ready in 1.6 s, `/` → 200, `/dev/data-check` → 200, no runtime errors |
+| Screenshots | ✅ `phase0-scaffold.png`, `phase1-data-layer.png` regenerated — **no console or page errors** |
+
 ## Bugs found and fixed during verification
 
 1. **Persisted settings never rehydrated (real bug).**
@@ -79,7 +92,23 @@ every testing criterion has been executed and verified.
    The orbit-overlap assertion now checks every radius pair
    (`|r₁−r₂| > size₁+size₂`), which is the actual non-overlap condition.
 
-5. **`next.config.mjs` `allowedDevOrigins` deliberately left unset.**
+5. **`<html>` had no background (flash-of-white risk).**
+   Only `<body>` painted `--cosmic-black`, so rubber-band overscroll or any
+   region outside the document box could expose the default white canvas.
+   Fixed in `globals.css` by painting the background on `html` too. Verified by
+   sampling real screenshot pixels (every edge sample is dark: `#070e1d`,
+   `#050510`) — an apparent white edge strip in review was a *viewer* scaling
+   artifact, not a page bug.
+
+6. **Test harness couldn't get a browser (environment, not app).**
+   `cdn.playwright.dev` is unreachable from this sandbox, so `npx playwright
+   install` fails. Solved outside the repo (`/home/user/browser-tools`) with a
+   Chromium 153 build from the npm registry plus bundled AL2023 libs and
+   SwiftShader — giving real WebGL 2.0. `scripts/shots.mjs`,
+   `scripts/persist-check.mjs` and `playwright.config.ts` now honour an optional
+   `CHROME_PATH`, which is a no-op wherever Playwright's own browser exists.
+
+7. **`next.config.mjs` `allowedDevOrigins` deliberately left unset.**
    Next 14.2 *warns* on cross-origin dev requests when unset but *blocks with
    403* as soon as it is defined. The preview is proxied through a domain we
    don't control, so warn-only is the safe choice. Verified with a Host-header

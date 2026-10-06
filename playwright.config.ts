@@ -23,7 +23,11 @@ export default defineConfig({
     video: "off",
     // Software WebGL needs a moment; keep animations running for visual tests.
     launchOptions: {
+      // `CHROME_PATH` allows running where Playwright's browser download is
+      // blocked; leave unset to use Playwright's own bundled Chromium.
+      executablePath: process.env.CHROME_PATH || undefined,
       args: [
+        "--disable-dev-shm-usage",
         "--no-sandbox",
         "--enable-unsafe-swiftshader",
         "--use-gl=angle",
