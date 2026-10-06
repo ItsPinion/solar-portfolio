@@ -1,0 +1,166 @@
+/* ============================================================
+   Complex keyframe animations (Phase 10 polish)
+   Design-token driven; every animation is neutralised by the
+   prefers-reduced-motion block at the end of the file.
+   ============================================================ */
+
+/* Gentle vertical drift used by floating HUD chips and cards */
+@keyframes sp-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+/* Breathing halo for the CSS star (mobile 2D view + loading screen) */
+@keyframes sp-star-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.035);
+    opacity: 1;
+  }
+}
+
+/* Rotating conic sweep used on the star's corona */
+@keyframes sp-corona-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shimmering gradient text / skeleton loaders */
+@keyframes sp-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Slow hue drift for nebula backdrops */
+@keyframes sp-hue-drift {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(24deg);
+  }
+}
+
+/* Scanning highlight inside progress bars */
+@keyframes sp-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Dashed orbital stroke rotating around the CSS preview star */
+@keyframes sp-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Soft blinking caret for terminal-flavoured HUD text */
+@keyframes sp-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+/* Rising solar-flare particles (loading screen) */
+@keyframes sp-flare {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(var(--flare-x, 6px), -120px, 0) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Card entrance for the mobile 2D layout */
+@keyframes sp-card-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Orbital dot travelling a circular path (pure-CSS mobile star map) */
+@keyframes sp-orbit-travel {
+  from {
+    transform: rotate(0deg) translateX(var(--orbit-r, 60px)) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(var(--orbit-r, 60px)) rotate(-360deg);
+  }
+}
+
+.anim-float {
+  animation: sp-float 6s ease-in-out infinite;
+}
+.anim-star-pulse {
+  animation: sp-star-pulse 4.5s ease-in-out infinite;
+}
+.anim-corona-spin {
+  animation: sp-corona-spin 22s linear infinite;
+}
+.anim-hue-drift {
+  animation: sp-hue-drift 30s ease-in-out infinite;
+}
+.anim-blink {
+  animation: sp-blink 1.2s steps(1, end) infinite;
+}
+.anim-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: sp-shimmer 2.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-float,
+  .anim-star-pulse,
+  .anim-corona-spin,
+  .anim-hue-drift,
+  .anim-blink,
+  .anim-shimmer {
+    animation: none !important;
+  }
+}
