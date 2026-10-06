@@ -60,6 +60,32 @@ const scenes = {
     await page.screenshot({ path: `${OUT}/phase1-data-layer.png`, fullPage: true });
   },
 
+  // ---------------------------------------------------------------- Phase 2
+  async "phase2-loading"(page) {
+    await page.setViewportSize(DESKTOP);
+    // Capture the loading state: screenshot before the first frame completes.
+    await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("[data-testid='scene-loader']", { timeout: 15000 }).catch(() => {});
+    await page.screenshot({ path: `${OUT}/phase2-loading.png` });
+  },
+
+  async phase2(page) {
+    await page.setViewportSize(DESKTOP);
+    await goto(page);
+    // Wait for the loader to hand over, i.e. a real frame has been drawn.
+    await page
+      .waitForSelector("[data-testid='scene-loader'][data-visible='false']", { timeout: 45000 })
+      .catch(() => console.log("\n   ⚠ loader never cleared"));
+    await page.waitForTimeout(1200);
+    await page.screenshot({ path: `${OUT}/phase2-scene-foundation.png` });
+
+    // Zoomed-out / zoomed-in framing checks for the camera rig.
+    await page.mouse.move(720, 450);
+    await page.mouse.wheel(0, 600);
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: `${OUT}/phase2-camera-zoomed.png` });
+  },
+
   // generic full-page captures, useful for every UI phase
   async desktop(page) {
     await page.setViewportSize(DESKTOP);

@@ -7,8 +7,8 @@ every testing criterion has been executed and verified.
 |-------|-------|--------|----------|
 | 0 | Project Scaffolding & Configuration | ✅ **Complete** | `npm run build` clean · `tsc` clean · `lint` 0 warnings · `screenshots/phase0-scaffold.png` |
 | 1 | Data Layer & State Management | ✅ **Complete** | 47 unit tests pass · `verify:data` ✓ · `verify:stores` ✓ · `screenshots/phase1-data-layer.png` |
-| 2 | 3D Scene Foundation & Starfield | ⬜ Not started (awaiting go-ahead) | — |
-| 3 | Central Star (Profile Hub) | ⬜ Not started | — |
+| 2 | 3D Scene Foundation & Starfield | ✅ **Complete** | 69 unit tests pass · `verify:scene` 44/44 (dev **and** prod) · `screenshots/phase2-*.png` |
+| 3 | Central Star (Profile Hub) | ⏸ **Awaiting go-ahead** | Spec ready in `plan.md` |
 | 4 | Planets (Projects) with Orbital Motion | ⬜ Not started | — |
 | 5 | Satellites (Technologies) | ⬜ Not started | — |
 | 6 | Project Detail Panel | ⬜ Not started | — |
@@ -67,6 +67,41 @@ every testing criterion has been executed and verified.
 | `npm run dev` | ✅ ready in 1.6 s, `/` → 200, `/dev/data-check` → 200, no runtime errors |
 | Screenshots | ✅ `phase0-scaffold.png`, `phase1-data-layer.png` regenerated — **no console or page errors** |
 
+
+## Phase 2 — 3D Scene Foundation & Starfield ✅
+
+Full-viewport WebGL stage that later phases populate. Nothing orbits yet —
+this is the sky, the camera and the quality/fallback machinery.
+
+| Criterion | Result |
+|---|---|
+| `<Canvas>` mounts and fills the viewport | ✅ 1440×900 measured |
+| Render loop genuinely runs | ✅ `window.__solarFrames` 0 → 31 |
+| Deterministic starfield, scaled by quality tier | ✅ 3000/5000/8000 — identical geometry per seed |
+| Stars are round, soft, colour-varied and twinkle | ✅ GLSL point sprites, additive, `discard` outside radius |
+| Nebula sky reads as deep space | ✅ procedural gradient + 4 drifting wisps |
+| Camera opens on the overview framing | ✅ distance 43.01 (= ‖(0,25,35)‖) |
+| Orbit drag + wheel zoom work, with clamps | ✅ stop exactly at 10.00 / 60.00 |
+| Idle drift keeps the scene alive | ✅ Δazimuth 0.0105 rad / 2.2 s |
+| Bloom on medium/high, off on low | ✅ 23 vs 2 draw calls/frame |
+| Reduced motion freezes animation | ✅ Δazimuth 0.00000 rad, scene still renders |
+| No WebGL → readable 2D fallback, no crash | ✅ automatic, zero page errors |
+| Canvas resizes with the viewport | ✅ tablet 768×1024 + mobile 375×812 |
+| three.js stays out of the initial payload | ✅ lazy chunk · 88.8 kB First Load JS |
+| Unit tests + typecheck + lint clean | ✅ 69 tests (22 new), 0 lint warnings |
+
+### Stage composition (per frame at `high`)
+
+| Layer | Draw calls | Notes |
+|---|---|---|
+| Scene background (sky gradient) | 1 | replaces the nebula sprite a distant camera cannot see |
+| Starfield (`THREE.Points`) | 1 | 8000 stars, one draw call, zero per-frame re-upload |
+| Nebula wisps (4 sprites) | 4 | additive, skipped on `low` + reduced motion |
+| Bloom mip chain (EffectComposer) | 17 | `medium`/`high` only — this is the 23 vs 2 split |
+
+Software-rendered FPS in this sandbox is meaningless, so the frame budget is
+tracked as **draw calls + submitted vertices** instead.
+
 ## Bugs found and fixed during verification
 
 1. **Persisted settings never rehydrated (real bug).**
@@ -108,7 +143,44 @@ every testing criterion has been executed and verified.
    `scripts/persist-check.mjs` and `playwright.config.ts` now honour an optional
    `CHROME_PATH`, which is a no-op wherever Playwright's own browser exists.
 
-7. **`next.config.mjs` `allowedDevOrigins` deliberately left unset.**
+7. **The loading overlay never cleared when the canvas never mounted (real bug).**
+   `SceneLoader` sat at the `SceneRoot` level while `isLoaded` is only ever set
+   from the first rendered frame. With no WebGL (or in 2D mode) there is no
+   frame, so the overlay covered the fallback page *forever* and pinned it at
+   0%. Moved the loader inside the branch that actually mounts a canvas, and
+   made the no-3D path resolve the loading state itself. Caught by screenshotting
+   the forced no-WebGL route.
+
+8. **Visible 8-bit gradient banding in the sky (real bug).**
+   1024² dithering was needed, not guesswork: sampling a real 1440px scanline
+   showed flat plateaus (`12,18,39` for ~240 px) separated by 3/255 steps.
+   Fixed with zero-mean ±1.35-level noise in `createSkyGradientTexture`; the
+   texture is now 1024² so the grain survives stretching to the viewport.
+
+9. **Telemetry under-reported the scene (measurement bug).**
+   `gl.info.autoReset` is `true` by default, so three.js wiped the counters at
+   the start of *every* `renderer.render()` — and with `EffectComposer` each
+   bloom pass is its own call. Perf samples therefore described only the final
+   fullscreen quad. Now `autoReset` is off and `SceneTelemetry` owns the reset.
+   Also: three.js counts `POINTS` separately from `triangles`, so a starfield
+   legitimately reports **0 triangles** — the sampler publishes `points` too.
+
+10. **Two "passing" checks that proved nothing (test bugs).**
+    The zoom test asserted `distance >= 9.5`, which also holds if the rig never
+    reaches the clamp — and it never did, because the drag events were not being
+    delivered. Rewritten to drive 60 wheel events and assert the band
+    `9.5 ≤ d ≤ 12`, plus a second check after further zooming. The reduced-motion
+    and drag checks read `window.__solarPerf` immediately after acting, which
+    returns a sample taken *before* the action (it refreshes only every 30
+    frames ≈ seconds under software rendering) — both silently passed on
+    unchanged values. Added `freshPerf()`, which waits for a post-action sample.
+
+11. **Starfield silently clipped if `sizes` exceeds the tier ceiling (guarded).**
+    The size distribution was retuned to `0.7 + rand³ · 1.7`; ceiling raised
+    accordingly and covered by unit tests asserting the ≤2.41 range and the
+    small/giant ratio, so a future retune cannot drift past GL's point-size cap.
+
+12. **`next.config.mjs` `allowedDevOrigins` deliberately left unset.**
    Next 14.2 *warns* on cross-origin dev requests when unset but *blocks with
    403* as soon as it is defined. The preview is proxied through a domain we
    don't control, so warn-only is the safe choice. Verified with a Host-header
@@ -136,9 +208,16 @@ npm run verify         # typecheck + lint + unit tests + data-driven check
 npm test               # Jest unit tests
 npm run verify:data    # append a 7th planet/technology, assert, restore
 npm run verify:stores  # live browser check of stores + persistence
+npm run verify:scene   # live WebGL scene checks (44 assertions)
 npm run test:e2e       # Playwright E2E
 npm run shots          # visual verification → screenshots/
 ```
+
+## Next up
+
+**Phase 3 — Central Star (Profile Hub)** is specified in `plan.md` and ready to
+start, but **blocked pending an explicit go-ahead** — the instruction for this
+session was to complete Phase 2 and stop before Phase 3.
 
 ## Replacing placeholder content
 

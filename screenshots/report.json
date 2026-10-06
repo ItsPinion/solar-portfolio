@@ -2,7 +2,12 @@
   "base": "http://127.0.0.1:3000",
   "scenes": [
     "phase0",
-    "phase1"
+    "phase1",
+    "phase2",
+    "phase2-loading",
+    "desktop",
+    "tablet",
+    "mobile"
   ],
   "consoleErrors": [],
   "pageErrors": []

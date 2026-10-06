@@ -1,0 +1,230 @@
+{
+  "base": "http://127.0.0.1:3000",
+  "passed": 44,
+  "failed": 0,
+  "checks": [
+    {
+      "label": "canvas element is present and visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "canvas fills the viewport",
+      "pass": true,
+      "detail": "1440×900"
+    },
+    {
+      "label": "frame counter advances (WebGL loop is live)",
+      "pass": true,
+      "detail": "0 → 30"
+    },
+    {
+      "label": "data-scene-ready flips to true",
+      "pass": true,
+      "detail": "got \"true\""
+    },
+    {
+      "label": "loading overlay hands over",
+      "pass": true,
+      "detail": "data-visible=false"
+    },
+    {
+      "label": "auto-detected quality is a valid tier",
+      "pass": true,
+      "detail": "got \"low\" (device probe, not a fixed default)"
+    },
+    {
+      "label": "low tier renders 3000 stars",
+      "pass": true,
+      "detail": "got 3000"
+    },
+    {
+      "label": "low tier post-processing = false",
+      "pass": true,
+      "detail": "got false"
+    },
+    {
+      "label": "low tier submits the starfield geometry",
+      "pass": true,
+      "detail": "3000 points drawn (expected 3000)"
+    },
+    {
+      "label": "low tier frame budget is sane",
+      "pass": true,
+      "detail": "2 calls, 2 tris, 3000 points, dpr 1"
+    },
+    {
+      "label": "low tier reports post-processing off",
+      "pass": true,
+      "detail": "2 calls"
+    },
+    {
+      "label": "low tier is reflected in the DOM",
+      "pass": true,
+      "detail": "got \"low\""
+    },
+    {
+      "label": "medium tier renders 5000 stars",
+      "pass": true,
+      "detail": "got 5000"
+    },
+    {
+      "label": "medium tier post-processing = true",
+      "pass": true,
+      "detail": "got true"
+    },
+    {
+      "label": "medium tier submits the starfield geometry",
+      "pass": true,
+      "detail": "5000 points drawn (expected 5000)"
+    },
+    {
+      "label": "medium tier frame budget is sane",
+      "pass": true,
+      "detail": "23 calls, 27 tris, 5000 points, dpr 1"
+    },
+    {
+      "label": "medium tier reports post-processing passes",
+      "pass": true,
+      "detail": "23 calls"
+    },
+    {
+      "label": "medium tier is reflected in the DOM",
+      "pass": true,
+      "detail": "got \"medium\""
+    },
+    {
+      "label": "high tier renders 8000 stars",
+      "pass": true,
+      "detail": "got 8000"
+    },
+    {
+      "label": "high tier post-processing = true",
+      "pass": true,
+      "detail": "got true"
+    },
+    {
+      "label": "high tier submits the starfield geometry",
+      "pass": true,
+      "detail": "8000 points drawn (expected 8000)"
+    },
+    {
+      "label": "high tier frame budget is sane",
+      "pass": true,
+      "detail": "23 calls, 27 tris, 8000 points, dpr 1"
+    },
+    {
+      "label": "high tier reports post-processing passes",
+      "pass": true,
+      "detail": "23 calls"
+    },
+    {
+      "label": "high tier is reflected in the DOM",
+      "pass": true,
+      "detail": "got \"high\""
+    },
+    {
+      "label": "camera opens at the configured overview distance",
+      "pass": true,
+      "detail": "43.01 vs 43.01"
+    },
+    {
+      "label": "camera starts above the orbital plane",
+      "pass": true,
+      "detail": "y=25.00"
+    },
+    {
+      "label": "zoom-in stops at the minimum distance (never through the star)",
+      "pass": true,
+      "detail": "distance 10.00 (min 10)"
+    },
+    {
+      "label": "camera stays inside the starfield when zoomed in",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "zoom-out stops at the maximum distance",
+      "pass": true,
+      "detail": "distance 60.00 (max 60)"
+    },
+    {
+      "label": "idle drift rotates the camera (auto-rotate on)",
+      "pass": true,
+      "detail": "Δazimuth 0.0105 rad"
+    },
+    {
+      "label": "dragging orbits the camera",
+      "pass": true,
+      "detail": "Δazimuth 4.8045 rad"
+    },
+    {
+      "label": "camera stays in front of the starfield after a drag",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "OS motion preference is honoured",
+      "pass": true,
+      "detail": "data-reduced-motion=true"
+    },
+    {
+      "label": "auto-rotation is disabled under reduced motion",
+      "pass": true,
+      "detail": "Δazimuth 0.00000 rad"
+    },
+    {
+      "label": "scene still renders with motion off",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "view mode 2d renders the fallback instead of the canvas",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "no canvas is mounted in 2D mode",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "2D fallback still shows the profile headline",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "no WebGL → automatic 2D fallback",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "no WebGL → page throws nothing",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "canvas resizes to the tablet viewport (768×1024)",
+      "pass": true,
+      "detail": "768×1024"
+    },
+    {
+      "label": "canvas resizes to the mobile viewport (375×812)",
+      "pass": true,
+      "detail": "375×812"
+    },
+    {
+      "label": "no uncaught page errors during the whole run",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "no console errors during the whole run",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "renderer": "ANGLE / SwiftShader (software)"
+}

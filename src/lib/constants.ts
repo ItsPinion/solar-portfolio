@@ -76,6 +76,33 @@ export const QUALITY_PRESETS = {
 /** Starfield shell radius — stars are distributed on this sphere. */
 export const STARFIELD_RADIUS = 200;
 
+/** Innermost star distance as a fraction of STARFIELD_RADIUS (shell depth). */
+export const STARFIELD_INNER_RATIO = 0.72;
+
+/** Share of stars gathered into a galactic band (fakes a Milky Way). */
+export const STARFIELD_BAND_RATIO = 0.34;
+
+/** Galactic band thickness as a fraction of the shell radius. */
+export const STARFIELD_BAND_THICKNESS = 0.13;
+
+/** Galactic band tilt in degrees. */
+export const STARFIELD_BAND_TILT = 27;
+
+/** Scene camera field of view. Wide enough to frame all orbits from default. */
+export const CAMERA_FOV = 55;
+
+/**
+ * Nebula wisps painted behind the starfield. Positions are art-directed (not
+ * random) so the sky reads the same in every screenshot; `scale` is in world
+ * units at roughly the starfield shell distance.
+ */
+export const NEBULA_CLOUDS = [
+  { id: "nebula-purple-veil", color: "#6A2BB5", position: [-120, 62, -150], scale: 300, opacity: 0.2, speed: 0.006 },
+  { id: "nebula-blue-drift", color: "#1E5FA8", position: [145, -28, -130], scale: 340, opacity: 0.16, speed: -0.004 },
+  { id: "nebula-violet-haze", color: "#8B5CF6", position: [58, 96, 165], scale: 260, opacity: 0.12, speed: 0.003 },
+  { id: "nebula-deep-wash", color: "#0EA5E9", position: [-155, -74, 92], scale: 320, opacity: 0.1, speed: -0.002 },
+] as const;
+
 /* ============================================================
    Motion / interaction
    ============================================================ */

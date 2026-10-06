@@ -16,6 +16,7 @@
     "analyze": "ANALYZE=true next build",
     "verify:data": "node scripts/verify-data-driven.mjs",
     "verify:stores": "node scripts/persist-check.mjs",
+    "verify:scene": "node scripts/verify-scene.mjs",
     "verify": "npm run typecheck && npm run lint && npm test && npm run verify:data"
   },
   "dependencies": {

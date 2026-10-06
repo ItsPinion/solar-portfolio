@@ -8,6 +8,8 @@ const customJestConfig = {
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    // Mirrors the webpack `asset/source` rule for GLSL (next.config.mjs).
+    "\\.(glsl|vert|frag)$": "<rootDir>/tests/unit/glslStub.js",
   },
   testMatch: ["<rootDir>/tests/unit/**/*.test.{ts,tsx}"],
   collectCoverageFrom: [
