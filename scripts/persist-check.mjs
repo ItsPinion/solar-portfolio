@@ -1,6 +1,12 @@
 import { chromium } from "@playwright/test";
-const BASE = "http://127.0.0.1:3000";
-const browser = await chromium.launch({ args: ["--no-sandbox"] });
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { chromiumLaunch } = require("./chromium-runtime.cjs");
+
+const BASE = process.env.SOLAR_BASE ?? "http://127.0.0.1:3000";
+const launch = chromiumLaunch();
+const browser = await chromium.launch({ ...launch.launchOptions, args: launch.args });
 const page = await (await browser.newContext()).newPage();
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));

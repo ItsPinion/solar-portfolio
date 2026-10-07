@@ -1,0 +1,130 @@
+{
+  "base": "http://127.0.0.1:3000",
+  "when": "2026-10-07T06:46:43.274Z",
+  "passed": 24,
+  "failed": 0,
+  "results": [
+    {
+      "label": "loading screen is shown first",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "loading screen fades out and unmounts",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "3D scene reports ready with frames rendering",
+      "pass": true,
+      "detail": "46 frames, quality high"
+    },
+    {
+      "label": "canvas fills the viewport",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "star geometry matches the quality tier",
+      "pass": true,
+      "detail": "8000 stars"
+    },
+    {
+      "label": "stars are drawn as points in one draw call",
+      "pass": true,
+      "detail": "8000 points"
+    },
+    {
+      "label": "stars appear in every quadrant of the viewport",
+      "pass": true,
+      "detail": "top-left 0.125%, top-right 0.125%, bottom-left 0.140%, bottom-right 0.096%"
+    },
+    {
+      "label": "star density is balanced (no empty corner)",
+      "pass": true,
+      "detail": "lowest: bottom-right"
+    },
+    {
+      "label": "sky is dark (space reads as black)",
+      "pass": true,
+      "detail": "mean luminance 0.0128"
+    },
+    {
+      "label": "no star is clipped into a solid blob",
+      "pass": true,
+      "detail": "mean luminance 0.0128"
+    },
+    {
+      "label": "star brightness changes over time with the camera pinned",
+      "pass": true,
+      "detail": "mean frame-to-frame delta 0.0024862"
+    },
+    {
+      "label": "twinkle is subtle, not strobing",
+      "pass": true,
+      "detail": "delta 0.0024862"
+    },
+    {
+      "label": "mouse drag rotates the camera",
+      "pass": true,
+      "detail": "azimuth -0.008 → -0.948"
+    },
+    {
+      "label": "auto-rotate stops while the user interacts",
+      "pass": true,
+      "detail": "autoRotating=false"
+    },
+    {
+      "label": "camera never flips over the pole",
+      "pass": true,
+      "detail": "polar 2.765 rad (limit π·0.12)"
+    },
+    {
+      "label": "scroll wheel zooms in",
+      "pass": true,
+      "detail": "43.0 → 39.2"
+    },
+    {
+      "label": "zoom-in stops at the minimum distance (10)",
+      "pass": true,
+      "detail": "distance 10.00"
+    },
+    {
+      "label": "zoom-out stops at the maximum distance (60)",
+      "pass": true,
+      "detail": "distance 60.00"
+    },
+    {
+      "label": "mid zoom sits between the limits",
+      "pass": true,
+      "detail": "distance 54.71"
+    },
+    {
+      "label": "fog/depth: the sky still renders at a different zoom level",
+      "pass": true,
+      "detail": "mean luminance 0.0075"
+    },
+    {
+      "label": "bloom pipeline active on the high tier",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "render budget is sane (draw calls < 120, triangles < 200k)",
+      "pass": true,
+      "detail": "26 draw calls, 31 triangles, 8,000 points"
+    },
+    {
+      "label": "no console errors",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "label": "no uncaught page errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

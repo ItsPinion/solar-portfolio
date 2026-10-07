@@ -1,5 +1,15 @@
 import { defineConfig, devices } from "@playwright/test";
 
+// Resolves the browser to use. On a normal machine this is a no-op (Playwright
+// uses its own download); in restricted environments `scripts/ensure-browser.mjs`
+// has cached a Chromium binary and the shared libraries it needs.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { chromiumLaunch } = require("./scripts/chromium-runtime.cjs");
+const { args: chromiumArgs, launchOptions } = chromiumLaunch() as {
+  args: string[];
+  launchOptions: Record<string, unknown>;
+};
+
 /**
  * Playwright configuration (Phases 9, 11 & 12).
  *
@@ -23,13 +33,8 @@ export default defineConfig({
     video: "off",
     // Software WebGL needs a moment; keep animations running for visual tests.
     launchOptions: {
-      args: [
-        "--no-sandbox",
-        "--enable-unsafe-swiftshader",
-        "--use-gl=angle",
-        "--use-angle=swiftshader",
-        "--ignore-gpu-blocklist",
-      ],
+      ...launchOptions,
+      args: chromiumArgs,
     },
   },
 
